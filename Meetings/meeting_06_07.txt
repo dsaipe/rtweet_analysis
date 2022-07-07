@@ -1,0 +1,43 @@
+## Attending
+
+* David
+* Clarissa
+* Mandy
+
+## Notes
+
+- Clarissa responsible for social media
+
+- Twitter: current process
+  - 3 tweets a week
+    - 2 external blogs/articles related to R or Python
+    - 1 announcement (training courses etc.)
+    - Advertising blogs every/every other week on Tuesday
+    - Blog post announcement every week on Thursdays
+    - Ad-hoc tweeting when we're on events
+      - Big data Belfast good test run for conference tweeting, e.g. RStudio conference
+    - Shiny conference coming up (tweeting out speakers etc.)
+    - Used to only tweet in the morning, now tweeting in the afternoon (does that help engagement)
+    - New Shiny conf tag that only we use so far
+
+- This project
+  - {rtweet} can pull full timelines from Twitter
+  - get the data
+    - what's working and what's not?
+  - Clarissa interested in engagement, likes/shares
+  - Is tweeting worth it?
+  - do hashtags affect engagement? e.g. #rstats
+    - two twitter bots that retweet anything tagged #rstats (R for data science + Rstats bots)
+  - Are most engagements just internal? If we're able to see who has liked etc.
+  - how much more engagement do we get from using e.g. #rstats? with just #shiny tag not much engagement
+  - does having a picture affect engagement?
+  - we know #rstats works, but what about #python #datascience #stats
+    - are there any hashtags we should be using? e.g. looking at #rstats tweets and seeing if there's hashtags associated with it
+  - general research about social media (times, content, etc.) is also welcome and would probably be useful to help us see if we're aligned with known "best practices" and if there's anything more we can do
+
+- Bonus
+  - Google analytics
+    - There is a lot of data on Google Analytics that show users on our website and for example where they've come from (Twitter)
+    - We could supplement the analysis with some of this
+  - LinkedIn
+    - Getting LinkedIn data from R is possible but the package (‘Rlinkedin’) is no longer maintained, so not sure if it works or not

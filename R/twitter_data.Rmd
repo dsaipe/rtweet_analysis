@@ -1,0 +1,62 @@
+---
+title: '@jumping_uk Twitter Analysis'
+author: "David Saipe"
+date: '2022-07-06'
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(rtweet)
+library(dplyr)
+library(ggplot2)
+library(stringr)
+
+```
+
+## Impact of using hashtags
+
+```{r #rstats, echo = FALSE}
+rstats = read.csv("C:/Users/dfs20/OneDrive - Newcastle University/Stage 2/Jumping Rivers/rtweet_analysis/Data/hashtags/rstats_hashtag_tweets.csv")
+
+rstats = rstats %>%
+  filter(is_retweet == FALSE & is_quote == FALSE)
+rstats = rstats %>%
+  select(favorite_count, retweet_count, hashtags)
+  
+num_of_hashtags = as.array(rep(0,nrow(rstats)))
+for(i in 1:nrow(rstats)){
+  num_of_hashtags[i] = str_count(rstats[i,3], "\\w+")
+  rstats = rstats %>%
+    mutate(interactions = favorite_count + retweet_count,
+           hashtag_num = num_of_hashtags)
+}
+
+ggplot(rstats_tweets) +
+  geom_smooth(aes(interactions,hashtag_num)) +
+  xlim(0,25) +
+  xlab("Number of interactions") + 
+  ylab("Number of hashtags used")
+  
+```
+
+```{r jr timeline, include = FALSE}
+#no argument in get_timeline() for excluding retweets
+jr_timeline = read.csv("C:/Users/dfs20/OneDrive - Newcastle University/Stage 2/Jumping Rivers/rtweet_analysis/Data/jr timeline/jr_timeline.csv")
+
+jr_timeline = jr_timeline %>%
+  filter(is_retweet == FALSE & is_quote == FALSE)
+jr_timeline = jr_timeline %>%
+  select(created_at, favorite_count, retweet_count, mentions_screen_name, hashtags, media_type)
+
+hour = as.array(rep(0,nrow(jr_timeline)))
+for(i in 1:nrow(jr_timeline)){
+  hour[i] = substring(jr_timeline[i,1], 12, 13)
+  jr_timeline = jr_timeline %>%
+    mutate(hour_posted = hour, interactions = retweet_count + favorite_count)
+}
+
+
+```
