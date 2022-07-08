@@ -19,7 +19,7 @@ library(stringr)
 ## Impact of using hashtags
 
 ```{r #rstats, echo = FALSE}
-rstats = read.csv("C:/Users/dfs20/OneDrive - Newcastle University/Stage 2/Jumping Rivers/rtweet_analysis/Data/hashtags/rstats_hashtag_tweets.csv")
+rstats = read.csv("C:/Users/dfs20/OneDrive - Newcastle University/Stage 2/Jumping Rivers/rtweet_analysis/Data/rstats_hashtag_tweets.csv")
 
 rstats = rstats %>%
   filter(is_retweet == FALSE & is_quote == FALSE)
@@ -34,29 +34,43 @@ for(i in 1:nrow(rstats)){
            hashtag_num = num_of_hashtags)
 }
 
-ggplot(rstats_tweets) +
-  geom_smooth(aes(interactions,hashtag_num)) +
+ggplot(rstats) +
+  geom_smooth(aes(hashtag_num, interactions)) +
   xlim(0,25) +
-  xlab("Number of interactions") + 
-  ylab("Number of hashtags used")
+  xlab("Number of hashtags used") + 
+  ylab("Number of interactions")
   
 ```
 
 ```{r jr timeline, include = FALSE}
 #no argument in get_timeline() for excluding retweets
-jr_timeline = read.csv("C:/Users/dfs20/OneDrive - Newcastle University/Stage 2/Jumping Rivers/rtweet_analysis/Data/jr timeline/jr_timeline.csv")
+jr_timeline = read.csv("C:/Users/dfs20/OneDrive - Newcastle University/Stage 2/Jumping Rivers/rtweet_analysis/Data/jr_timeline.csv")
 
 jr_timeline = jr_timeline %>%
   filter(is_retweet == FALSE & is_quote == FALSE)
 jr_timeline = jr_timeline %>%
-  select(created_at, favorite_count, retweet_count, mentions_screen_name, hashtags, media_type)
+  select(status_id, created_at, favorite_count, retweet_count, mentions_screen_name, hashtags, media_type)
+jr_timeline$status_id = gsub("x", "", as.character(jr_timeline$status_id))
 
 hour = as.array(rep(0,nrow(jr_timeline)))
 for(i in 1:nrow(jr_timeline)){
-  hour[i] = substring(jr_timeline[i,1], 12, 13)
+  hour[i] = substring(jr_timeline[i,2], 12, 13)
   jr_timeline = jr_timeline %>%
     mutate(hour_posted = hour, interactions = retweet_count + favorite_count)
 }
-
-
 ```
+
+```{r retweeters data, include = FALSE}
+#jr_retweeters = vector()
+jr_retweeters = get_retweeters("1525066441329938432")
+```
+
+
+
+
+
+
+
+
+
+
