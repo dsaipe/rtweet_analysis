@@ -55,14 +55,24 @@ jr_timeline$status_id = gsub("x", "", as.character(jr_timeline$status_id))
 hour = as.array(rep(0,nrow(jr_timeline)))
 for(i in 1:nrow(jr_timeline)){
   hour[i] = substring(jr_timeline[i,2], 12, 13)
+  hour = gsub("^0+", "", as.character(hour))
   jr_timeline = jr_timeline %>%
-    mutate(hour_posted = hour, interactions = retweet_count + favorite_count)
+    mutate(hour_posted = strtoi(hour), interactions = retweet_count + favorite_count)
 }
 ```
 
-```{r retweeters data, include = FALSE}
-#jr_retweeters = vector()
-jr_retweeters = get_retweeters("1525066441329938432")
+```{r retweeters, include = FALSE}
+status_id = c(jr_timeline$status_id)
+retweeters = c(get_retweeters("1544677140653809664
+")$user_id)
+for(i in 2:69){
+  retweeters = append(retweeters, get_retweeters(status_id[i])$user_id)
+}
+
+retweeters_data = read.csv("C:/Users/dfs20/OneDrive - Newcastle University/Stage 2/Jumping Rivers/rtweet_analysis/Data/retweeters_list.csv")
+retweeters_data = retweeters_data %>%
+  select(location)
+
 ```
 
 
