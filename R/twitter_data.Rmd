@@ -59,14 +59,8 @@ rstats = rstats %>%
   filter(is_retweet == FALSE & is_quote == FALSE)
 rstats = rstats %>%
   select(favorite_count, retweet_count, hashtags)
-  
-num_of_hashtags = as.array(rep(0,nrow(rstats)))
-for(i in 1:nrow(rstats)){
-  num_of_hashtags[i] = str_count(rstats[i,3], "\\w+")
-  rstats = rstats %>%
-    mutate(interactions = favorite_count + retweet_count,
-           hashtag_num = num_of_hashtags)
-}
+rstats = rstats %>%
+  mutate(hashtag_num = str_count(hashtags, "\\w+"))
 
 ggplot(rstats) +
   geom_smooth(aes(hashtag_num, interactions)) +
