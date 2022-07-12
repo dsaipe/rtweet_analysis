@@ -39,17 +39,9 @@ ggplot(avg_interactions, aes(hour_posted, avg_interactions)) +
 ```
 
 ```{r retweeters, include = FALSE}
-status_id = c(jr_timeline$status_id)
-retweeters = c(get_retweeters("1544677140653809664
-")$user_id)
-for(i in 2:69){
-  retweeters = append(retweeters, get_retweeters(status_id[i])$user_id)
-}
-
 retweeters_data = read.csv("Data/retweeters_list.csv")
 retweeters_data = retweeters_data %>%
   select(location)
-
 ```
 
 ```{r hashtags, echo = FALSE}
