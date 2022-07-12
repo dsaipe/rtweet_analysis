@@ -13,7 +13,7 @@ library(rtweet)
 library(dplyr)
 library(ggplot2)
 library(stringr)
-
+library(lubridate)
 ```
 
 ```{r jr timeline, include = FALSE}
@@ -23,15 +23,9 @@ jr_timeline = jr_timeline %>%
   filter(is_retweet == FALSE)
 jr_timeline = jr_timeline %>%
   select(status_id, created_at, favorite_count, retweet_count, mentions_screen_name, urls_url, hashtags, media_type)
+jr_timeline = jr_timeline %>%
+  mutate(hour_posted = hour(created_at), interactions = retweet_count + favorite_count)
 jr_timeline$status_id = gsub("x", "", as.character(jr_timeline$status_id))
-
-hour = as.array(rep(0,nrow(jr_timeline)))
-for(i in 1:nrow(jr_timeline)){
-  hour[i] = substring(jr_timeline[i,2], 12, 13)
-  hour = gsub("^0+", "", as.character(hour))
-  jr_timeline = jr_timeline %>%
-    mutate(hour_posted = strtoi(hour), interactions = retweet_count + favorite_count)
-}
 ```
 
 ```{r time posted, include = FALSE}
