@@ -17,7 +17,7 @@ library(stringr)
 ```
 
 ```{r jr timeline, include = FALSE}
-jr_timeline = read.csv("C:/Users/dfs20/OneDrive - Newcastle University/Stage 2/Jumping Rivers/rtweet_analysis/Data/jr_timeline.csv")
+jr_timeline = read.csv("Data/jr_timeline.csv")
 
 jr_timeline = jr_timeline %>%
   filter(is_retweet == FALSE)
@@ -52,14 +52,14 @@ for(i in 2:69){
   retweeters = append(retweeters, get_retweeters(status_id[i])$user_id)
 }
 
-retweeters_data = read.csv("C:/Users/dfs20/OneDrive - Newcastle University/Stage 2/Jumping Rivers/rtweet_analysis/Data/retweeters_list.csv")
+retweeters_data = read.csv("Data/retweeters_list.csv")
 retweeters_data = retweeters_data %>%
   select(location)
 
 ```
 
 ```{r hashtags, echo = FALSE}
-rstats = read.csv("C:/Users/dfs20/OneDrive - Newcastle University/Stage 2/Jumping Rivers/rtweet_analysis/Data/rstats_hashtag_tweets.csv")
+rstats = read.csv("Data/rstats_hashtag_tweets.csv")
 
 rstats = rstats %>%
   filter(is_retweet == FALSE & is_quote == FALSE)
