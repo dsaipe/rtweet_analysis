@@ -35,13 +35,12 @@ for(i in 1:nrow(jr_timeline)){
 ```
 
 ```{r time posted, include = FALSE}
-ggplot(jr_timeline) +
-  geom_bar(aes(hour_posted)) +
-  xlab("Hour Posted (24 hr)") +
-  ylab("Frequency")
+avg_interactions = jr_timeline %>%
+  group_by(hour_posted) %>%
+  summarise(avg_interactions = mean(interactions))
 
-ggplot(jr_timeline) +
-  geom_smooth(aes(hour_posted, interactions))
+ggplot(avg_interactions, aes(hour_posted, avg_interactions)) +
+  geom_col()
 
 ```
 
