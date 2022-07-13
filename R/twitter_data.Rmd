@@ -74,7 +74,17 @@ pm = ggplot(afternoon_retweeters,
   labs(title = "Retweeter Locations") +
   theme(plot.title = element_text(hjust = -15))
 
-
+rstats_followers = read.csv("Data/rstats_followers.csv")
+rstats_followers = rstats_followers %>%
+  group_by(location) %>%
+  mutate(count = n())
+ggplot(rstats_followers, 
+       aes(x = "", y = count, fill = location)) +
+  geom_bar(width = 1, stat = "identity") + 
+  coord_polar("y", start = 0) +
+  scale_fill_brewer(palette = "Dark2", name = "Continent") +
+  labs(title = "Locations of @rstatstweet followers") +
+  theme_void() 
 ```
 
 ```{r retweeters, include = FALSE}
