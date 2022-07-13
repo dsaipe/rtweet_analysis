@@ -28,13 +28,31 @@ jr_timeline = jr_timeline %>%
 jr_timeline$status_id = gsub("x", "", as.character(jr_timeline$status_id))
 ```
 
-```{r time posted, include = FALSE}
+```{r time posted, echo = FALSE}
 avg_interactions = jr_timeline %>%
   group_by(hour_posted) %>%
-  summarise(avg_interactions = mean(interactions))
+  summarise(avg_interactions = mean(interactions),
+            sd = sd(interactions))
 
 ggplot(avg_interactions, aes(hour_posted, avg_interactions)) +
-  geom_col()
+  geom_bar(stat = "identity") +
+  xlim(6,23) +
+  xlab("Hour Posted") + 
+  ylab("Average Number of Interactions")
+
+morning_retweeters = read.csv("Data/morning_retweeters.csv")
+morning_retweeters = morning_retweeters %>%
+  select(user_id, location)
+morning_retweeters = morning_retweeters %>%
+  filter(location != "")
+morning_retweeters$user_id = gsub("x", "", as.character(morning_retweeters$user_id))
+
+afternoon_retweeters = read.csv("Data/afternoon_retweeters.csv")
+afternoon_retweeters = afternoon_retweeters %>%
+  select(user_id, location)
+afternoon_retweeters = afternoon_retweeters %>%
+  filter(location != "")
+afternoon_retweeters$user_id = gsub("x", "", as.character(afternoon_retweeters$user_id))
 
 ```
 
