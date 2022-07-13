@@ -14,6 +14,7 @@ library(dplyr)
 library(ggplot2)
 library(stringr)
 library(lubridate)
+library(patchwork)
 ```
 
 ```{r jr timeline, include = FALSE}
@@ -42,17 +43,26 @@ ggplot(avg_interactions, aes(hour_posted, avg_interactions)) +
 
 morning_retweeters = read.csv("Data/morning_retweeters.csv")
 morning_retweeters = morning_retweeters %>%
-  select(user_id, location)
-morning_retweeters = morning_retweeters %>%
-  filter(location != "")
-morning_retweeters$user_id = gsub("x", "", as.character(morning_retweeters$user_id))
+  group_by(location) %>%
+  mutate(count = n())
+morning_retweeters = morning_retweeters[-c(38:57),]
 
 afternoon_retweeters = read.csv("Data/afternoon_retweeters.csv")
 afternoon_retweeters = afternoon_retweeters %>%
-  select(user_id, location)
-afternoon_retweeters = afternoon_retweeters %>%
-  filter(location != "")
-afternoon_retweeters$user_id = gsub("x", "", as.character(afternoon_retweeters$user_id))
+  group_by(location) %>%
+  mutate(count = n())
+afternoon_retweeters = afternoon_retweeters[-c(41:71),]
+
+am = ggplot(morning_retweeters, 
+       aes(x = "", y = count, fill = location)) +
+  geom_bar(width = 1, stat = "identity") + 
+  coord_polar("y", start = 0)
+
+pm = ggplot(afternoon_retweeters, 
+       aes(x = "", y = count, fill = location)) +
+  geom_bar(width = 1, stat = "identity") + 
+  coord_polar("y", start = 0)
+
 
 ```
 
