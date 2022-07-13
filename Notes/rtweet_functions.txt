@@ -1,6 +1,0 @@
-Useful rtweets functions:
-	- search_tweets(): Gets tweets data on statuses identified via search query. 
-	- get_timeline(): Get one or more user timelines (tweets posted by target user(s)).
-	- get_retweeters(): Get user IDs of users who retweeted a given status.
-	- lookup_users(): Get Twitter users data for given users (user IDs or screen names).
-	- stream_tweets(): Collect a live stream of Twitter data. 
