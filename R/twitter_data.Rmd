@@ -2,9 +2,7 @@
 title: '@jumping_uk Twitter Analysis'
 author: "David Saipe"
 date: '2022-07-06'
-output:
-  pdf_document: default
-  html_document: default
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -57,15 +55,25 @@ am = ggplot(morning_retweeters,
        aes(x = "", y = count, fill = location)) +
   geom_bar(width = 1, stat = "identity") + 
   coord_polar("y", start = 0) +
-  scale_fill_brewer(palette = "Dark2") 
+  scale_fill_brewer(palette = "Dark2", name = "Continent") +
+  labs(subtitle = "Morning") +
+  theme_void() +
+  theme(plot.subtitle = element_text(hjust = 0.5))
 
 pm = ggplot(afternoon_retweeters, 
        aes(x = "", y = count, fill = location)) +
   geom_bar(width = 1, stat = "identity") + 
   coord_polar("y", start = 0) +
-  scale_fill_brewer(palette = "Dark2") 
-  
-am + pm
+  scale_fill_brewer(palette = "Dark2", name = "Continent") +
+  labs(subtitle = "Afternoon") +
+  theme_void() +
+  theme(legend.position = "none",
+        plot.subtitle = element_text(hjust = 0.5)) 
+
+(am + pm) +
+  labs(title = "Retweeter Locations") +
+  theme(plot.title = element_text(hjust = -15))
+
 
 ```
 
@@ -83,7 +91,8 @@ rstats = rstats %>%
 rstats = rstats %>%
   select(favorite_count, retweet_count, hashtags)
 rstats = rstats %>%
-  mutate(hashtag_num = str_count(hashtags, "\\w+"))
+  mutate(hashtag_num = str_count(hashtags, "\\w+"),
+         interactions = retweet_count + favorite_count)
 
 ggplot(rstats) +
   geom_smooth(aes(hashtag_num, interactions)) +
