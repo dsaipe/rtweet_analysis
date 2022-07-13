@@ -56,13 +56,16 @@ afternoon_retweeters = afternoon_retweeters[-c(41:71),]
 am = ggplot(morning_retweeters, 
        aes(x = "", y = count, fill = location)) +
   geom_bar(width = 1, stat = "identity") + 
-  coord_polar("y", start = 0)
+  coord_polar("y", start = 0) +
+  scale_fill_brewer(palette = "Dark2") 
 
 pm = ggplot(afternoon_retweeters, 
        aes(x = "", y = count, fill = location)) +
   geom_bar(width = 1, stat = "identity") + 
-  coord_polar("y", start = 0)
-
+  coord_polar("y", start = 0) +
+  scale_fill_brewer(palette = "Dark2") 
+  
+am + pm
 
 ```
 
