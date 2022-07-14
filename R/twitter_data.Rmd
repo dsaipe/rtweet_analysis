@@ -14,16 +14,17 @@ library(stringr)
 library(lubridate)
 library(patchwork)
 library(tidyr)
+library(magrittr)
 ```
 
 ```{r jr timeline, include = FALSE}
 jr_timeline = read.csv("Data/jr_timeline.csv")
 
-jr_timeline = jr_timeline %>%
+jr_timeline %<>%
   filter(is_retweet == FALSE)
-jr_timeline = jr_timeline %>%
+jr_timeline %<>%
   select(status_id, created_at, favorite_count, retweet_count, mentions_screen_name, urls_url, hashtags, media_type)
-jr_timeline = jr_timeline %>%
+jr_timeline %<>%
   mutate(hour_posted = hour(created_at), interactions = retweet_count + favorite_count)
 jr_timeline$status_id = gsub("x", "", as.character(jr_timeline$status_id))
 ```
@@ -31,9 +32,9 @@ jr_timeline$status_id = gsub("x", "", as.character(jr_timeline$status_id))
 ```{r #rstats, include = FALSE}
 rstats = read.csv("Data/rstats_hashtag.csv")
 
-rstats = rstats %>%
+rstats %<>%
   select(created_at, favorite_count, retweet_count, hashtags, media_type, urls_url, mentions_screen_name)
-rstats = rstats %>%
+rstats %<>%
   mutate(hashtag_num = str_count(hashtags, "\\w+"),
          interactions = retweet_count + favorite_count)
 
@@ -51,13 +52,13 @@ ggplot(avg_interactions, aes(hour_posted, avg_interactions)) +
   ylab("Average Number of Interactions")
 
 morning_retweeters = read.csv("Data/morning_retweeters.csv")
-morning_retweeters = morning_retweeters %>%
+morning_retweeters %<>%
   group_by(location) %>%
   mutate(count = n())
 morning_retweeters = morning_retweeters[-c(38:57),]
 
 afternoon_retweeters = read.csv("Data/afternoon_retweeters.csv")
-afternoon_retweeters = afternoon_retweeters %>%
+afternoon_retweeters %<>%
   group_by(location) %>%
   mutate(count = n())
 afternoon_retweeters = afternoon_retweeters[-c(41:71),]
@@ -86,7 +87,7 @@ pm = ggplot(afternoon_retweeters,
   theme(plot.title = element_text(hjust = -15))
 
 rstats_followers = read.csv("Data/rstats_followers.csv")
-rstats_followers = rstats_followers %>%
+rstats_followers %<>%
   group_by(location) %>%
   mutate(count = n())
 ggplot(rstats_followers, 
@@ -104,7 +105,7 @@ rstats = rstats[-c(29, 3913),]
 avg_interactions = jr_timeline %>%
   group_by(media_type) %>%
   summarise(jr_interactions = mean(interactions))
-avg_interactions = avg_interactions %>%
+avg_interactions %<>%
   mutate(rstats %>%
            group_by(media_type) %>%
            summarise(rstats_interactions = mean(interactions)))
@@ -126,30 +127,24 @@ avg_interactions %>%
                     name = "Source",
                     labels = c("@jumping_uk", "#rstats")) +
   theme_classic()
-
-
 ```
 
+
 ```{r hashtags, echo = FALSE}
-rstats = read.csv("Data/rstats_hashtag.csv")
-
-rstats = rstats %>%
-  select(favorite_count, retweet_count, hashtags)
-rstats = rstats %>%
-  mutate(hashtag_num = str_count(hashtags, "\\w+"),
-         interactions = retweet_count + favorite_count)
-
 ggplot(rstats) +
   geom_smooth(aes(hashtag_num, interactions)) +
-  xlim(0,25) +
+  xlim(0,40) +
+  ylim(0,90) +
   xlab("Number of hashtags used") + 
   ylab("Number of interactions")
   
 ```
 
+```{r retweeters, echo = FALSE}
+retweeters = read.csv("Data/retweeters.csv")
 
 
-
+```
 
 
 
