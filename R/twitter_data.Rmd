@@ -158,7 +158,9 @@ hashtags %>%
                     labels = c("No", "Yes")) +
   xlab("Hashtag") +
   ylab("Average Interactions") +
-  theme_minimal()
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 30,
+                                   size = 6))
   
 ```
 
