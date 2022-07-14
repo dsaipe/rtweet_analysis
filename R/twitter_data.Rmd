@@ -124,7 +124,8 @@ avg_interactions %>%
   ylab("Average Interactions") + 
   scale_fill_brewer(palette = "Dark2", 
                     name = "Source",
-                    labels = c("@jumping_uk", "#rstats"))
+                    labels = c("@jumping_uk", "#rstats")) +
+  theme_classic()
 
 
 ```
