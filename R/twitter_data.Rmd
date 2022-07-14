@@ -13,6 +13,7 @@ library(ggplot2)
 library(stringr)
 library(lubridate)
 library(patchwork)
+library(tidyr)
 ```
 
 ```{r jr timeline, include = FALSE}
@@ -27,11 +28,21 @@ jr_timeline = jr_timeline %>%
 jr_timeline$status_id = gsub("x", "", as.character(jr_timeline$status_id))
 ```
 
+```{r #rstats, include = FALSE}
+rstats = read.csv("Data/rstats_hashtag.csv")
+
+rstats = rstats %>%
+  select(created_at, favorite_count, retweet_count, hashtags, media_type, urls_url, mentions_screen_name)
+rstats = rstats %>%
+  mutate(hashtag_num = str_count(hashtags, "\\w+"),
+         interactions = retweet_count + favorite_count)
+
+```
+
 ```{r time posted, echo = FALSE}
 avg_interactions = jr_timeline %>%
   group_by(hour_posted) %>%
-  summarise(avg_interactions = mean(interactions),
-            sd = sd(interactions))
+  summarise(avg_interactions = mean(interactions))
 
 ggplot(avg_interactions, aes(hour_posted, avg_interactions)) +
   geom_bar(stat = "identity") +
@@ -87,17 +98,40 @@ ggplot(rstats_followers,
   theme_void() 
 ```
 
-```{r retweeters, include = FALSE}
-retweeters_data = read.csv("Data/retweeters_list.csv")
-retweeters_data = retweeters_data %>%
-  select(location)
+```{r images, echo = FALSE}
+rstats = rstats[-c(29, 3913),]
+
+avg_interactions = jr_timeline %>%
+  group_by(media_type) %>%
+  summarise(jr_interactions = mean(interactions))
+avg_interactions = avg_interactions %>%
+  mutate(rstats %>%
+           group_by(media_type) %>%
+           summarise(rstats_interactions = mean(interactions)))
+
+avg_interactions$media_type[1] = c("None")
+avg_interactions$media_type[2] = c("Photo")
+
+avg_interactions %>%
+  pivot_longer(cols = c("jr_interactions",
+                      "rstats_interactions"),
+             names_to = "interactions",
+             values_to = "count") %>%
+  ggplot(aes(x = media_type, y = count, 
+             fill = interactions)) +
+  geom_col(position = "dodge") +
+  xlab("Media") +
+  ylab("Average Interactions") + 
+  scale_fill_brewer(palette = "Dark2", 
+                    name = "Source",
+                    labels = c("@jumping_uk", "#rstats"))
+
+
 ```
 
 ```{r hashtags, echo = FALSE}
-rstats = read.csv("Data/rstats_hashtag_tweets.csv")
+rstats = read.csv("Data/rstats_hashtag.csv")
 
-rstats = rstats %>%
-  filter(is_retweet == FALSE & is_quote == FALSE)
 rstats = rstats %>%
   select(favorite_count, retweet_count, hashtags)
 rstats = rstats %>%
