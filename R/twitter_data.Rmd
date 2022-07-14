@@ -137,11 +137,36 @@ ggplot(rstats) +
   ylim(0,90) +
   xlab("Number of hashtags used") + 
   ylab("Number of interactions")
+
+hashtags = tibble(
+  hashtags = c("rstats", "stats", "datascience", "python",
+               "machinelearning", "bigdata"),
+  interactions_used = c(9.37, 9.45, 8.48, 8.26, 4.86, 9.75),
+  interactions_not_used = c(4.71, 4.51, 6.69, 6.7, 6.89, 6.84)
+)
+
+hashtags %>% 
+  pivot_longer(
+    cols = c("interactions_used", "interactions_not_used"),
+    names_to = c("interactions"),
+    values_to = c("count")
+  ) %>%
+  ggplot(aes(hashtags, count, fill = interactions)) +
+  geom_col(position = "dodge") + 
+  scale_fill_brewer(palette = "Dark2", 
+                    name = "Hashtag Used",
+                    labels = c("No", "Yes")) +
+  xlab("Hashtag") +
+  ylab("Average Interactions") +
+  theme_minimal()
   
 ```
 
 ```{r retweeters, echo = FALSE}
 retweeters = read.csv("Data/retweeters.csv")
+
+retweeters %<>%
+  mutate(jumping_rivers = FALSE)
 
 
 ```
