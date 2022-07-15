@@ -164,11 +164,13 @@ jr_hashtags %>%
   scale_fill_brewer(palette = "Dark2", 
                     name = "Hashtag Used",
                     labels = c("No", "Yes")) +
+  labs(title = "Impact of hashtags on @jumping_uk tweets") +
   xlab("Hashtag") +
   ylab("Average Interactions") +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 30,
-                                   size = 6))
+                                   size = 6,
+                                   vjust = 0.7))
 
 rstats_hashtags = tibble(
   hashtags = c("stats", "datascience", "python", 
@@ -190,7 +192,8 @@ rstats_hashtags %>%
   ylab("Average Interactions") +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 30,
-                                   size = 6))
+                                   size = 6,
+                                   vjust = 0.7))
 
 ```
 
