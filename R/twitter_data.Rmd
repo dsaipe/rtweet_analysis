@@ -138,7 +138,6 @@ avg_interactions %>%
   theme_classic()
 ```
 
-
 ```{r hashtags, echo = FALSE}
 ggplot(rstats) +
   geom_smooth(aes(hashtag_num, interactions)) +
@@ -147,14 +146,14 @@ ggplot(rstats) +
   xlab("Number of hashtags used") + 
   ylab("Number of interactions")
 
-hashtags = tibble(
+jr_hashtags = tibble(
   hashtags = c("rstats", "stats", "datascience", "python",
                "machinelearning", "bigdata"),
   interactions_used = c(9.37, 9.45, 8.48, 8.26, 4.86, 9.75),
   interactions_not_used = c(4.71, 4.51, 6.69, 6.7, 6.89, 6.84)
 )
 
-hashtags %>% 
+jr_hashtags %>% 
   pivot_longer(
     cols = c("interactions_used", "interactions_not_used"),
     names_to = c("interactions"),
@@ -170,7 +169,29 @@ hashtags %>%
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 30,
                                    size = 6))
-  
+
+rstats_hashtags = tibble(
+  hashtags = c("stats", "datascience", "python", 
+               "machinelearning", "bigdata"),
+  used = c(37.71, 35.73, 37.28, 36.1, 40.3),
+  not_used = c(21.21, 24.62, 24, 25.14, 22.35)
+)
+rstats_hashtags %>%
+  pivot_longer(cols = c("used", "not_used"),
+               names_to = "interactions",
+               values_to = "count") %>%
+  ggplot(aes(hashtags, count, fill = interactions)) +
+           geom_col(position = "dodge") +
+  scale_fill_brewer(palette = "Dark2", 
+                    name = "Hashtag Used",
+                    labels = c("No", "Yes")) +
+  labs(title = "Impact of hashtags commonly used with #rstats") +
+  xlab("Hashtag") +
+  ylab("Average Interactions") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 30,
+                                   size = 6))
+
 ```
 
 ```{r retweeters, echo = FALSE}
@@ -191,7 +212,6 @@ for(i in 1:nrow(retweeters)){
     retweeters$jumping_rivers[i] = TRUE
   }
 }
-
 ```
 
 
