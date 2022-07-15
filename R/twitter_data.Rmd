@@ -36,20 +36,29 @@ rstats %<>%
   select(created_at, favorite_count, retweet_count, hashtags, media_type, urls_url, mentions_screen_name)
 rstats %<>%
   mutate(hashtag_num = str_count(hashtags, "\\w+"),
-         interactions = retweet_count + favorite_count)
+         interactions = retweet_count + favorite_count,
+         hour_posted = hour(created_at))
 
 ```
 
 ```{r time posted, echo = FALSE}
 avg_interactions = jr_timeline %>%
   group_by(hour_posted) %>%
-  summarise(avg_interactions = mean(interactions))
+  summarise(avg_interactions = mean(interactions),
+            se = std.error(interactions))
+
+avg_interactions = avg_interactions[-c(1,2),]
 
 ggplot(avg_interactions, aes(hour_posted, avg_interactions)) +
-  geom_bar(stat = "identity") +
-  xlim(6,23) +
+  geom_bar(fill = "#d95f02",  color = "black",
+           stat = "identity") +
+  geom_errorbar(aes(ymin = avg_interactions - se,
+                    ymax = avg_interactions + se),
+                width = .2) +
+  xlim(6,24) +
   xlab("Hour Posted") + 
-  ylab("Average Number of Interactions")
+  ylab("Average Number of Interactions") +
+  theme_classic() 
 
 morning_retweeters = read.csv("Data/morning_retweeters.csv")
 morning_retweeters %<>%
@@ -83,7 +92,7 @@ pm = ggplot(afternoon_retweeters,
         plot.subtitle = element_text(hjust = 0.5)) 
 
 (am + pm) +
-  labs(title = "Retweeter Locations") +
+  labs(title = "Retweeter Locations (excluding UK)") +
   theme(plot.title = element_text(hjust = -15))
 
 rstats_followers = read.csv("Data/rstats_followers.csv")
@@ -96,7 +105,7 @@ ggplot(rstats_followers,
   coord_polar("y", start = 0) +
   scale_fill_brewer(palette = "Dark2", name = "Continent") +
   labs(title = "Locations of @rstatstweet followers") +
-  theme_void() 
+  theme_void()
 ```
 
 ```{r images, echo = FALSE}
@@ -167,9 +176,21 @@ hashtags %>%
 ```{r retweeters, echo = FALSE}
 retweeters = read.csv("Data/retweeters.csv")
 
+jr = c("csgillespie", "nrennie35", "StatsRhian", 
+       "MandyNorrbo", "clayyb93", "AbrahamsAmieroh",
+       "jwalton3141", "parissagregg", "haematobot",
+       "_jcken")
+
 retweeters %<>%
   mutate(jumping_rivers = FALSE)
+retweeters %<>%
+  select(user_id, screen_name, followers_count, jumping_rivers)
 
+for(i in 1:nrow(retweeters)){
+  if(retweeters$screen_name[i] %in% jr){
+    retweeters$jumping_rivers[i] = TRUE
+  }
+}
 
 ```
 
