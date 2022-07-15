@@ -166,7 +166,7 @@ jr_hashtags %>%
                     labels = c("No", "Yes")) +
   xlab("Hashtag") +
   ylab("Average Interactions") +
-  theme_minimal() +
+  theme_classic() +
   theme(axis.text.x = element_text(angle = 30,
                                    size = 6))
 
@@ -188,7 +188,7 @@ rstats_hashtags %>%
   labs(title = "Impact of hashtags commonly used with #rstats") +
   xlab("Hashtag") +
   ylab("Average Interactions") +
-  theme_minimal() +
+  theme_classic() +
   theme(axis.text.x = element_text(angle = 30,
                                    size = 6))
 
