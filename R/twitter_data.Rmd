@@ -15,6 +15,7 @@ library(lubridate)
 library(patchwork)
 library(tidyr)
 library(magrittr)
+library(plotrix)
 ```
 
 ```{r jr timeline, include = FALSE}
