@@ -56,10 +56,11 @@ ggplot(avg_interactions, aes(hour_posted, avg_interactions)) +
   geom_errorbar(aes(ymin = avg_interactions - se,
                     ymax = avg_interactions + se),
                 width = .2) +
+  labs(subtitle = "Tweets by @jumping_uk from 2016 to 2022") +
   xlim(6,24) +
   xlab("Hour Posted") + 
   ylab("Average Number of Interactions") +
-  theme_classic() 
+  theme_classic()
 
 morning_retweeters = read.csv("Data/morning_retweeters.csv")
 morning_retweeters %<>%
@@ -93,8 +94,8 @@ pm = ggplot(afternoon_retweeters,
         plot.subtitle = element_text(hjust = 0.5)) 
 
 (am + pm) +
-  labs(title = "Retweeter Locations (excluding UK)") +
-  theme(plot.title = element_text(hjust = -15))
+  labs(title = "Locations of @jumping_uk retweeters (excluding UK)") +
+  theme(plot.title = element_text(hjust = 1.2))
 
 rstats_followers = read.csv("Data/rstats_followers.csv")
 rstats_followers %<>%
@@ -165,13 +166,14 @@ jr_hashtags %>%
   scale_fill_brewer(palette = "Dark2", 
                     name = "Hashtag Used",
                     labels = c("No", "Yes")) +
-  labs(title = "Impact of hashtags on @jumping_uk tweets") +
+  labs(title = "Effect of hashtags on interaction with @jumping_uk tweets") +
   xlab("Hashtag") +
   ylab("Average Interactions") +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 30,
                                    size = 6,
-                                   vjust = 0.7))
+                                   vjust = 0.7),
+        plot.title = element_text(hjust = 0.3))
 
 rstats_hashtags = tibble(
   hashtags = c("stats", "datascience", "python", 
@@ -194,7 +196,8 @@ rstats_hashtags %>%
   theme_classic() +
   theme(axis.text.x = element_text(angle = 30,
                                    size = 6,
-                                   vjust = 0.7))
+                                   vjust = 0.7),
+        plot.title = element_text(hjust = 0.5))
 
 ```
 
