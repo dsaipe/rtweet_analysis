@@ -206,8 +206,8 @@ retweeters = read.csv("Data/retweeters.csv")
 
 jr = c("csgillespie", "nrennie35", "StatsRhian", 
        "MandyNorrbo", "clayyb93", "AbrahamsAmieroh",
-       "jwalton3141", "parissagregg", "haematobot",
-       "_jcken")
+       "jwalton3141", "parisagregg", "haematobot",
+       "_jcken", "TimBrock_DtD")
 
 retweeters %<>%
   mutate(jumping_rivers = FALSE)
