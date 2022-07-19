@@ -141,13 +141,6 @@ avg_interactions %>%
 ```
 
 ```{r hashtags, echo = FALSE}
-ggplot(rstats) +
-  geom_smooth(aes(hashtag_num, interactions)) +
-  xlim(0,40) +
-  ylim(0,90) +
-  xlab("Number of hashtags used") + 
-  ylab("Number of interactions")
-
 jr_hashtags = tibble(
   hashtags = c("rstats", "stats", "datascience", "python",
                "machinelearning", "bigdata"),
