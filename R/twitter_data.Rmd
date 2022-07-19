@@ -22,10 +22,8 @@ library(plotrix)
 jr_timeline = read.csv("Data/jr_timeline.csv")
 
 jr_timeline %<>%
-  filter(is_retweet == FALSE)
-jr_timeline %<>%
-  select(status_id, created_at, favorite_count, retweet_count, mentions_screen_name, urls_url, hashtags, media_type)
-jr_timeline %<>%
+  filter(is_retweet == FALSE) %>%
+  select(status_id, created_at, favorite_count, retweet_count, mentions_screen_name, urls_url, hashtags, media_type) %>%
   mutate(hour_posted = hour(created_at), interactions = retweet_count + favorite_count)
 jr_timeline$status_id = gsub("x", "", as.character(jr_timeline$status_id))
 ```
@@ -34,8 +32,7 @@ jr_timeline$status_id = gsub("x", "", as.character(jr_timeline$status_id))
 rstats = read.csv("Data/rstats_hashtag.csv")
 
 rstats %<>%
-  select(created_at, favorite_count, retweet_count, hashtags, media_type, urls_url, mentions_screen_name)
-rstats %<>%
+  select(screen_name, followers_count, created_at, favorite_count, retweet_count, hashtags, media_type, urls_url, mentions_screen_name) %>%
   mutate(hashtag_num = str_count(hashtags, "\\w+"),
          interactions = retweet_count + favorite_count,
          hour_posted = hour(created_at))
