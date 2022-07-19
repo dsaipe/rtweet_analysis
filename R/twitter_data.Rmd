@@ -210,15 +210,9 @@ jr = c("csgillespie", "nrennie35", "StatsRhian",
        "_jcken", "TimBrock_DtD")
 
 retweeters %<>%
-  mutate(jumping_rivers = FALSE)
-retweeters %<>%
+  mutate(jumping_rivers = screen_name %in% jr) %>%
   select(user_id, screen_name, followers_count, jumping_rivers)
 
-for(i in 1:nrow(retweeters)){
-  if(retweeters$screen_name[i] %in% jr){
-    retweeters$jumping_rivers[i] = TRUE
-  }
-}
 ```
 
 
