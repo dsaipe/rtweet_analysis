@@ -141,6 +141,21 @@ avg_interactions %>%
 ```
 
 ```{r hashtags, echo = FALSE}
+rstats_top = rstats %>%
+  filter(interactions >= 225)
+hashtag_count = unnest_tokens(tbl = rstats_top,
+                            output = word,
+                            input = hashtags)
+hashtag_count = count(hashtag_count, word, sort = TRUE)
+hashtag_count %>%
+  slice_max(n, n = 50) %>%
+  ggplot(aes(label = word, size = n)) +
+  geom_text_wordcloud() +
+  scale_size_area(max_size = 10) +
+  labs(title = "Hashtags used alongside #rstats",
+       caption = "Taken from the top 100 most popular tweets containing #rstats") +
+  theme_void()
+
 jr_hashtags = tibble(
   hashtags = c("rstats", "stats", "datascience", "python",
                "machinelearning", "bigdata"),
