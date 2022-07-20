@@ -155,10 +155,10 @@ hashtag_count %>%
   theme_void()
 
 jr_hashtags = tibble(
-  hashtags = c("rstats", "stats", "datascience", "python",
-               "machinelearning", "bigdata"),
-  interactions_used = c(9.37, 9.45, 8.48, 8.26, 4.86, 9.75),
-  interactions_not_used = c(4.71, 4.51, 6.69, 6.7, 6.89, 6.84)
+  hashtags = c("shiny", "datascience", "python",
+               "tidyverse"),
+  interactions_used = c(13.6, 10.8, 10.6, 11.4),
+  interactions_not_used = c(9.2, 9.3, 9.4, 9.5)
 )
 
 jr_hashtags %>% 
@@ -172,7 +172,8 @@ jr_hashtags %>%
   scale_fill_brewer(palette = "Dark2", 
                     name = "Hashtag Used",
                     labels = c("No", "Yes")) +
-  labs(title = "Effect of hashtags on interaction with @jumping_uk tweets") +
+  labs(title = "Effect of hashtags used alongside #rstats",
+       caption = "Taken from @jumping_uk timeline") +
   xlab("Hashtag") +
   ylab("Average Interactions") +
   theme_classic() +
