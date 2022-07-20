@@ -64,13 +64,13 @@ morning_retweeters = read.csv("Data/morning_retweeters.csv")
 morning_retweeters %<>%
   group_by(location) %>%
   mutate(count = n())
-morning_retweeters = morning_retweeters[-c(38:57),]
+#morning_retweeters = morning_retweeters[-c(38:57),]
 
 afternoon_retweeters = read.csv("Data/afternoon_retweeters.csv")
 afternoon_retweeters %<>%
   group_by(location) %>%
   mutate(count = n())
-afternoon_retweeters = afternoon_retweeters[-c(41:71),]
+#afternoon_retweeters = afternoon_retweeters[-c(41:71),]
 
 am = ggplot(morning_retweeters, 
        aes(x = "", y = count, fill = location)) +
@@ -92,8 +92,8 @@ pm = ggplot(afternoon_retweeters,
         plot.subtitle = element_text(hjust = 0.5)) 
 
 (am + pm) +
-  labs(title = "Locations of @jumping_uk retweeters (excluding UK)") +
-  theme(plot.title = element_text(hjust = 1.2))
+  labs(title = "Locations of @jumping_uk retweeters") +
+  theme(plot.title = element_text(hjust = 1.4))
 
 rstats_followers = read.csv("Data/rstats_followers.csv")
 rstats_followers %<>%
