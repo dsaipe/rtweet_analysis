@@ -34,12 +34,10 @@ jr_timeline$status_id = gsub("x", "", as.character(jr_timeline$status_id))
 rstats = read.csv("Data/rstats_hashtag.csv")
 
 rstats %<>%
-  select(screen_name, followers_count, created_at, text, favorite_count, retweet_count, hashtags, media_type, urls_url, mentions_screen_name) %>%
+  select(screen_name, created_at, favorite_count, retweet_count, hashtags, media_type, mentions_screen_name, urls_url) %>%
   mutate(hashtag_num = str_count(hashtags, "\\w+"),
          interactions = retweet_count + favorite_count,
          hour_posted = hour(created_at))
-rstats$text = str_remove_all(rstats$text, "#[A-z0-9]+") %>%
-  str_squish()
 ```
 
 ```{r time posted, echo = FALSE}
@@ -223,22 +221,4 @@ retweeters %<>%
 
 ```
 
-```{r common word}
-tweet_words = unnest_tokens(tbl = rstats,
-                            output = word,
-                            input = text)
-tweet_words = anti_join(tweet_words, stop_words,
-                        by = "word")
-custom_stop_words = c("t.co", "https")
-words_count = count(tweet_words, word, sort = TRUE)
-words_count %<>%
-  filter(!(word %in% custom_stop_words))
-
-words_count %>%
-  slice_max(n, n = 50) %>%
-  ggplot(aes(label = word, size = n)) +
-  geom_text_wordcloud() +
-  scale_size_area(max_size = 10) +
-  theme_void()
-```
 
