@@ -146,7 +146,7 @@ hashtag_count = unnest_tokens(tbl = rstats_top,
                             input = hashtags)
 hashtag_count = count(hashtag_count, word, sort = TRUE)
 hashtag_count %>%
-  slice_max(n, n = 50) %>%
+  slice_max(n, n = 30) %>%
   ggplot(aes(label = word, size = n)) +
   geom_text_wordcloud() +
   scale_size_area(max_size = 10) +
