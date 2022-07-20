@@ -20,14 +20,24 @@ library(tidytext)
 library(ggwordcloud)
 ```
 
-```{r jr timeline, include = FALSE}
+```{r jr timeline, echo = FALSE}
 jr_timeline = read.csv("Data/jr_timeline.csv")
 
 jr_timeline %<>%
   filter(is_retweet == FALSE) %>%
   select(status_id, created_at, favorite_count, retweet_count, mentions_screen_name, urls_url, hashtags, media_type) %>%
-  mutate(hour_posted = hour(created_at), interactions = retweet_count + favorite_count)
+  mutate(hour_posted = hour(created_at), 
+         interactions = retweet_count + favorite_count,
+         year = year(created_at))
 jr_timeline$status_id = gsub("x", "", as.character(jr_timeline$status_id))
+
+ggplot(jr_timeline, aes(year)) +
+  geom_point(stat = "count") +
+  geom_line(stat = "count") +
+  xlim(2017,2022) +
+  theme_classic() +
+  xlab("Year") +
+  ylab("Number of Tweets")
 ```
 
 ```{r #rstats, include = FALSE}
