@@ -251,8 +251,8 @@ jr_hashtags %>%
 rstats_hashtags = tibble(
   hashtags = c("stats", "datascience", "python", 
                "machinelearning", "bigdata"),
-  used = c(37.71, 35.73, 37.28, 36.1, 40.3),
-  not_used = c(21.21, 24.62, 24, 25.14, 22.35)
+  used = c(80.71, 35.73, 37.28, 36.1, 40.3),
+  not_used = c(29.45, 24.62, 24, 25.14, 22.35)
 )
 rstats_hashtags %>%
   pivot_longer(cols = c("used", "not_used"),
