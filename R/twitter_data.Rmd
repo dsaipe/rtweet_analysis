@@ -87,7 +87,9 @@ avg_weekday = by_weekday %>%
   group_by(day) %>%
   summarise(avg_rt = mean(retweet_count), 
             avg_fav = mean(favorite_count))
-avg_weekday$day = factor(avg_weekday$day, 
+avg_weekday$day = c("Sun", "Mon", "Tue", "Wed", 
+                    "Thu", "Fri", "Sat")
+avg_weekday$day = factor(avg_weekday$day,
                          c("Mon", "Tue", "Wed", 
                            "Thu", "Fri", "Sat", "Sun"))
 
