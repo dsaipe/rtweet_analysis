@@ -161,7 +161,10 @@ pm = ggplot(afternoon_retweeters,
   labs(title = "Locations of @jumping_uk retweeters") +
   theme(plot.title = element_text(hjust = 1.4))
 
-rstats_followers = read.csv("Data/rstats_followers.csv")
+rstats_followers = read.csv("Data/rstats_followers2.csv")
+rstats_followers = rstats_followers[1:216,]
+rstats_followers %<>%
+  select(location)
 rstats_followers %<>%
   group_by(location) %>%
   mutate(count = n())
