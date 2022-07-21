@@ -51,6 +51,31 @@ rstats %<>%
 ```
 
 ```{r time posted, echo = FALSE}
+by_weekday = jr_timeline %>%
+  mutate(day = wday(created_at))
+
+avg_weekday = by_weekday %>%
+  group_by(day) %>%
+  summarise(avg_rt = mean(retweet_count), 
+            avg_fav = mean(favorite_count))
+avg_weekday$day = factor(avg_weekday$day, 
+                         c("Mon", "Tue", "Wed", 
+                           "Thu", "Fri", "Sat", "Sun"))
+
+avg_weekday %>%
+  pivot_longer(cols = c("avg_rt", "avg_fav"),
+               names_to = c("avg_interactions"),
+               values_to = c("count")) %>%
+                 ggplot(aes(day, count, fill = avg_interactions)) + 
+  geom_col(position = "dodge") +
+  labs(caption = "Taken from @jumping_uk timeline from 2016 to 2022") +
+  xlab("Day") +
+  ylab("Average Interactions") +
+  scale_fill_brewer(palette = "Dark2",
+                    name = "",
+                    labels = c("Likes", "Retweets")) +
+  theme_classic()
+
 avg_interactions = jr_timeline %>%
   group_by(hour_posted) %>%
   summarise(avg_interactions = mean(interactions),
