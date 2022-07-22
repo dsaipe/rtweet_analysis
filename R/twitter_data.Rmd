@@ -79,7 +79,7 @@ rstats %<>%
          hour_posted = hour(created_at))
 ```
 
-```{r time posted, echo = FALSE}
+```{r day of the week, echo = FALSE}
 by_weekday = jr_timeline %>%
   mutate(day = wday(created_at))
 
@@ -106,7 +106,21 @@ avg_weekday %>%
                     name = "",
                     labels = c("Likes", "Retweets")) +
   theme_classic()
+```
 
+## Time posted
+
+From looking at the @jumping_uk timeline, there are two average peaks in 
+engagement: one from 9-12am, and another from 3-6pm, as shown below. 
+
+Examining the locations of people retweeting @jumping_uk tweets, there is a 
+higher proportion of retweeters in the  afternoon peak that are from America, 
+with a lower proportion being from Asia and Africa. The proportion of retweeters
+from the UK remains similar throughout the day (just under 50%). It should also 
+be taken into account that around 75% of @rstatstweet followers are from America, 
+so tweets containing #rstats may receive more engagement in the afternoon.
+
+```{r time posted, echo = FALSE}
 avg_interactions = jr_timeline %>%
   group_by(hour_posted) %>%
   summarise(avg_interactions = mean(interactions),
@@ -177,6 +191,12 @@ ggplot(rstats_followers,
   theme_void()
 ```
 
+## Images
+
+As predicted, images do affect levels of engagement positively. The figure below 
+shows the average levels of interaction for tweets with no media and tweets with 
+photos, taken from both the #rstats timeline and the @jumping_uk timeline.
+
 ```{r images, echo = FALSE}
 rstats = rstats[-c(29, 3913),]
 
@@ -206,6 +226,22 @@ avg_interactions %>%
                     labels = c("@jumping_uk", "#rstats")) +
   theme_classic()
 ```
+
+## Hashtags
+
+Below are the top 30 hashtags used alongside #rstats, taken from the most 
+popular tweets containing #rstats (07/07 - 14/07). The impact of some of these 
+hashtags when used alongside #rstats are shown below. 
+
+@jumping_uk uses #rstats, #datascience, #python, #tidyverse and #shiny most often. 
+The bar chart below shows the impact of these four hashtags when used 
+alongside #rstats. @jumping_uk doesn't use #machinelearning and #bigdata as often 
+but the figure below above that these have a significant impact on engagement, 
+so could be used more often in the future. 
+
+There are also hashtag trends such as #100daysofcode and #tidytuesdays which 
+could be good ways to appear more on the RStats community timeline (there are 
+two accounts that retweet all tweets with #100daysofcode). 
 
 ```{r hashtags, echo = FALSE}
 rstats_top = rstats %>%
