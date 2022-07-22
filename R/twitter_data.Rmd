@@ -15,7 +15,6 @@ library(lubridate)
 library(patchwork)
 library(tidyr)
 library(magrittr)
-library(plotrix)
 library(tidytext)
 library(ggwordcloud)
 ```
@@ -123,17 +122,13 @@ so tweets containing #rstats may receive more engagement in the afternoon.
 ```{r time posted, echo = FALSE}
 avg_interactions = jr_timeline %>%
   group_by(hour_posted) %>%
-  summarise(avg_interactions = mean(interactions),
-            se = std.error(interactions))
+  summarise(avg_interactions = mean(interactions))
 
 avg_interactions = avg_interactions[-c(1,2),]
 
 ggplot(avg_interactions, aes(hour_posted, avg_interactions)) +
   geom_bar(fill = "#d95f02",  color = "black",
            stat = "identity") +
-  geom_errorbar(aes(ymin = avg_interactions - se,
-                    ymax = avg_interactions + se),
-                width = .2) +
   labs(subtitle = "Tweets by @jumping_uk from 2016 to 2022") +
   xlim(6,24) +
   xlab("Hour Posted") + 
