@@ -75,18 +75,22 @@ From looking at the @jumping_uk timeline, tweets posted between 8-11am have gene
 
 ```{r time posted, echo = FALSE}
 avg_interactions = jr_timeline %>%
+  filter(interactions < 100) %>%
   group_by(hour_posted) %>%
-  summarise(avg_interactions = mean(interactions))
+  summarise(mean = mean(interactions),
+            se = std.error(interactions))
 
 avg_interactions = avg_interactions[-c(1,2),]
 
-ggplot(avg_interactions, aes(hour_posted, avg_interactions)) +
-  geom_bar(fill = "#d95f02",  color = "black",
+ggplot(avg_interactions, aes(hour_posted, mean)) +
+  geom_bar(fill = "#1b9e77",  color = "black",
            stat = "identity") +
+  geom_errorbar(aes(ymin = mean - se, ymax = mean + se),
+                    width = 0.2, position = position_dodge(0.9)) +
   labs(caption = "Taken from @jumping_uk timeline from 2016 to 2022") +
   xlim(6,24) +
   xlab("Hour Posted") + 
-  ylab("Average Number of Interactions") +
+  ylab("Interactions") +
   theme_classic()
 ```
 
@@ -98,6 +102,7 @@ from the UK remains similar throughout the day (just under 50%).
 ```{r retweeter locations, echo = FALSE}
 morning_retweeters = read.csv("Data/morning_retweeters.csv")
 morning_retweeters %<>%
+  filter(!(location == "")) %>%
   group_by(location) %>%
   mutate(count = n())
 
@@ -111,10 +116,10 @@ am = ggplot(morning_retweeters,
   geom_bar(width = 1, stat = "identity") + 
   coord_polar("y", start = 0) +
   scale_fill_brewer(palette = "Dark2", name = "Continent") +
-  labs(subtitle = "Morning peak: 9am - 12pm") +
+  labs(subtitle = "Morning Peak") +
   theme_void() +
   theme(plot.subtitle = element_text(hjust = 0.5),
-        legend.position = "none")
+        legend.position = "left")
 
 pm = ggplot(afternoon_retweeters, 
        aes(x = "", y = count, fill = location)) +
