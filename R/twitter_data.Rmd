@@ -3,17 +3,15 @@ title: '@jumping_uk Twitter Analysis'
 author: "David Saipe"
 date: 'July 26, 2022'
 output: 
-  word_document:
+  pdf_document:
     toc: TRUE
     toc_depth: 2
-    fig_width: 6.5
-    fig_height: 4.5
 editor_options: 
   markdown: 
     wrap: 72
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 library(rtweet)
 library(dplyr)
@@ -37,7 +35,7 @@ The @jumping_uk account has been active since March 2016 and has almost
 weekdays). This year, the account is currently on track to posting its
 most tweets in one year. 
 
-```{r jr timeline, echo = FALSE}
+```{r jr timeline, include = FALSE}
 jr_timeline = read.csv("Data/jr_timeline.csv")
 
 jr_timeline %<>%
@@ -50,13 +48,13 @@ jr_timeline %<>%
 jr_timeline$status_id = gsub("x", "", as.character(jr_timeline$status_id))
 
 ggplot(jr_timeline, aes(year)) +
-  geom_point(stat = "count") +
-  geom_line(stat = "count") +
-  xlim(2016,2021) +
-  xlim(2017,2021) +
+  geom_bar(fill = "black", width = 0.2) +
+  xlim(2015,2022) +
   theme_classic() +
   xlab("Year") +
-  ylab("Number of Tweets")
+  ylab("Number of Tweets") +
+  theme_classic() +
+  coord_flip()
 ```
 
 This report will look into several factors that affect levels of
@@ -78,20 +76,6 @@ rstats %<>%
 ```
 
 \newpage
-
-# Time Posted
-
-## Day of the Week
-
-There is mixed opinion about whether tweets posted on the weekend
-receive as much interaction as those posted during in the week. The best
-day to post a tweet usually depends on the type of content that is being
-posted, and the account it is being posted from. For example, one
-article suggests that the best time to post about consumer goods is on
-the weekend, whereas the best time to post for technical business is
-during the week. @jumping_uk's timeline corroborates with this idea as
-tweets that are posted on Saturdays and Sundays usually receive less
-retweets and likes, compared to tweets posted during the week.
 
 # Time Posted
 
@@ -121,6 +105,17 @@ In recent months the account has only been posting on weekdays, and this seems t
 From looking at the @jumping_uk timeline, tweets posted between 8-11am have generally received the highest number of interactions. There are however spikes in engagement from 2pm onwards. 
 
 ```{r time posted, echo = FALSE}
+times = jr_timeline %>%
+  filter(!(year == 2016))
+
+hour_count = ggplot(times, aes(hour_posted)) + 
+  geom_bar(fill = "#d95f02") +
+  theme_classic() +
+  xlab("Hour Posted") +
+  ylab("Count") +
+  xlim(6,23) +
+  facet_wrap(~year)
+
 avg_interactions = jr_timeline %>%
   filter(interactions < 100) %>%
   group_by(hour_posted) %>%
@@ -129,7 +124,7 @@ avg_interactions = jr_timeline %>%
 
 avg_interactions = avg_interactions[-c(1,2),]
 
-ggplot(avg_interactions, aes(hour_posted, mean)) +
+hour_interactions = ggplot(avg_interactions, aes(hour_posted, mean)) +
   geom_bar(fill = "#1b9e77", color = "black", stat = "identity") +
   geom_errorbar(aes(ymin = mean - se, ymax = mean + se),
                     width = 0.2, position = position_dodge(0.9)) +
@@ -138,22 +133,25 @@ ggplot(avg_interactions, aes(hour_posted, mean)) +
   xlab("Hour Posted") + 
   ylab("Interactions") +
   theme_classic()
+
+hour_count + hour_interactions
 ```
 
-Examining the locations of people retweeting @jumping_uk tweets, there
+In recent years, the @jumping_uk has been posting much more frequently in the morning, yet the accounts top three highest interacted with tweets have all come in the afternoon. Examining the locations of people retweeting @jumping_uk tweets, there
 is a higher proportion of retweeters in the afternoon peak that are from
-America, with a lower proportion being from Asia and Africa. The
-proportion of retweeters from the UK is similar during both peaks.
+America (North, South and Central) with a lower proportion being from the UK, Africa and Asia, because of the time zone difference. 
 
 ```{r retweeter locations, echo = FALSE}
 morning_retweeters = read.csv("Data/morning_retweeters.csv")
 morning_retweeters %<>%
+  select(location) %>%
   filter(!(location == "")) %>%
   group_by(location) %>%
   mutate(count = n())
 
 afternoon_retweeters = read.csv("Data/afternoon_retweeters.csv")
 afternoon_retweeters %<>%
+  select(location) %>%
   filter(!(location == "")) %>%
   group_by(location) %>%
   mutate(count = n())
@@ -192,7 +190,7 @@ It should also
 be taken into account that around 75% of @rstatstweet followers are from America, 
 so tweets containing #rstats may receive more engagement in the afternoon.
 
-```{r rstats follower locations, echo = FALSE}
+```{r rstats follower locations, echo = FALSE, fig.width = 4.333, fig.height = 3, fig.align = 'center'}
 rstats_followers = read.csv("Data/rstats_followers2.csv")
 rstats_followers = rstats_followers[1:216,]
 rstats_followers %<>%
@@ -214,8 +212,6 @@ Despite this, it is important to tweet during both peaks of the day.
 Tweets come and go off the timeline very quickly so it's important to
 post and multiple times of the day to ensure it reaches as many
 followers as possible.
-
-\newpage
 
 ## Images
 
@@ -284,7 +280,7 @@ and #shiny most often. The bar chart below shows the impact of these
 four hashtags when used alongside #rstats. They all improve engagement,
 so should continue to be used when relevant.
 
-```{r jr hashtags, echo = FALSE}
+```{r jr hashtags, echo = FALSE, fig.width = 6, fig.height = 4.15}
 jr_hashtags = tibble(
   hashtags = c("shiny", "datascience", "python",
                "tidyverse"),
@@ -316,7 +312,7 @@ jr_hashtags %>%
 
 @jumping_uk doesn’t use #machinelearning and #bigdata as often; these are two hashtags that are often found in the most popular tweets on the #rstats timeline. The figure below shows that these have a significant impact on engagement on #rstats tweets, and so they could be used more often in the future.
 
-```{r rstats hashtags, echo = FALSE}
+```{r rstats hashtags, echo = FALSE, fig.width = 6, fig.height = 4.15}
 rstats_hashtags = tibble(
   hashtags = c("stats", "datascience", "python", 
                "machinelearning", "bigdata"),
