@@ -11,10 +11,6 @@ output:
 editor_options: 
   markdown: 
     wrap: 72
-date: '2022-07-06'
-output: html_document
-fig_width: 6
-fig_height: 4
 ---
 
 ```{r setup, include=FALSE}
@@ -97,24 +93,26 @@ during the week. @jumping_uk's timeline corroborates with this idea as
 tweets that are posted on Saturdays and Sundays usually receive less
 retweets and likes, compared to tweets posted during the week.
 
-## Best day of the week to post
+# Time Posted
 
-It is widely agreed upon that tweets posted on the weekend will receive less engagement from the users audience. @jumping_uk's timeline corroborates with this. Tweets posted on Saturdays and Sundays have generally received significantly less retweets and likes. 
+## Days of the Week
+
+There is mixed opinion about whether tweets posted on the weekend receive as much interaction as those posted during in the week. The best day to post a tweet usually depends on the type of content that is being posted, and the account it is being posted from. For example, one article suggests that the best time to post about consumer goods is on the weekend, whereas the best time to post for technical business is during the week. @jumping_uk’s timeline corroborates with this idea as tweets that are posted on Saturdays and Sundays usually receive less retweets and likes, compared to tweets posted during the week.
 
 ```{r day of the week, echo = FALSE}
 by_weekday = jr_timeline %>%
   mutate(day = lubridate::wday(created_at, label = TRUE, abbr = TRUE, week_start = getOption("lubridate.week.start", 1)))
 
-ggplot(by_weekday, aes(day, interactions)) + 
+ggplot(by_weekday, aes(day, interactions)) +
   geom_boxplot(fill = "#d95f02") +
   labs(caption = "Taken from @jumping_uk timeline from 2016 to 2022") +
   xlab("Day") +
-  ylab("Interactions") +
+  ylab("Average Interactions") +
   scale_y_log10() +
   theme_classic()
 ```
 
-In recent months the account has only been posting on weekdays, and this seems to be the right thing to be doing. More important tweets could start being posted on Mondays and Tuesdays, although there is little evidence to suggest that this would be beneficial.  
+In recent months the account has only been posting on weekdays, and this seems to be the right thing to be doing. More important tweets could start being posted on Mondays and Tuesdays, although there is little evidence to suggest that this would be beneficial.
 
 \newpage
 
@@ -134,7 +132,7 @@ avg_interactions = avg_interactions[-c(1,2),]
 ggplot(avg_interactions, aes(hour_posted, mean)) +
   geom_bar(fill = "#1b9e77", color = "black", stat = "identity") +
   geom_errorbar(aes(ymin = mean - se, ymax = mean + se),
-                width = .2, position = position_dodge(.9)) +
+                    width = 0.2, position = position_dodge(0.9)) +
   labs(caption = "Taken from @jumping_uk timeline from 2016 to 2022") +
   xlim(6,24) +
   xlab("Hour Posted") + 
@@ -165,7 +163,7 @@ am = ggplot(morning_retweeters,
   geom_bar(width = 1, stat = "identity") + 
   coord_polar("y", start = 0) +
   scale_fill_brewer(palette = "Dark2", name = "Continent") +
-  labs(subtitle = "Morning peak") +
+  labs(subtitle = "Morning Peak") +
   theme_void() +
   theme(plot.subtitle = element_text(hjust = 0.5),
         legend.position = "none")
@@ -175,7 +173,7 @@ pm = ggplot(afternoon_retweeters,
   geom_bar(width = 1, stat = "identity") + 
   coord_polar("y", start = 0) +
   scale_fill_brewer(palette = "Dark2", name = "Continent") +
-  labs(subtitle = "Afternoon peak") +
+  labs(subtitle = "Afternoon Peak") +
   theme_void() +
   theme(plot.subtitle = element_text(hjust = 0.5)) 
 
@@ -219,12 +217,9 @@ followers as possible.
 
 \newpage
 
-# Images
+## Images
 
-Images do affect levels of engagement positively. The figure below shows
-the average levels of interaction for tweets with no media and tweets
-that include a photo, taken from both the #rstats timeline and the
-@jumping_uk timeline.
+Images do affect levels of engagement positively. The figure below shows the average levels of interaction for tweets with no media and tweets that include a photo, taken from both the #rstats timeline and the @jumping_uk timeline.
 
 ```{r images, echo = FALSE}
 rstats = rstats[-c(29, 3913),]
@@ -263,12 +258,9 @@ compressed into 280 characters.
 
 \newpage
 
-# Hashtags
+## Hashtags
 
-There are multiple bots on twitter that retweet tweets containing #rstats (@rstatstweet and @rstats4ds are the two main ones). This
-hashtag should always be included in @jumping_uk tweets. Below are the
-top 30 most commonly used hashtags alongside #rstats, taken from the 100
-most popular tweets containing #rstats (07/07 - 14/07).
+There are multiple bots on twitter that retweet tweets containing #rstats (@rstatstweet and @rstats4ds are the two main ones). This hashtag should always be included in @jumping_uk tweets. Below are the top 30 most commonly used hashtags alongside #rstats, taken from the 100 most popular tweets containing #rstats (07/07 - 14/07). 
 
 ```{r hashtags wordcloud, echo = FALSE}
 rstats_top = rstats %>%
@@ -322,10 +314,7 @@ jr_hashtags %>%
         plot.title = element_text(hjust = 0.3))
 ```
 
-@jumping_uk doesn't use #machinelearning and #bigdata as often; these
-are two hashtags that are often found in the most popular tweets on the #rstats timeline. The figure below shows that these have a significant
-impact on engagement on #rstats tweets, and so they could be used more
-often in the future.
+@jumping_uk doesn’t use #machinelearning and #bigdata as often; these are two hashtags that are often found in the most popular tweets on the #rstats timeline. The figure below shows that these have a significant impact on engagement on #rstats tweets, and so they could be used more often in the future.
 
 ```{r rstats hashtags, echo = FALSE}
 rstats_hashtags = tibble(
@@ -367,25 +356,12 @@ would be appearing anyway.
 
 # Conclusion
 
-The factors analysed in this report have an effect on the levels of
-engagement with @jumping_uk tweets to varying extents.
+The factors analysed in this report have an effect on the levels of engagement with @jumping_uk tweets to varying extents.
 
-There are indeed optimum times of the day to post on twitter. However,
-because of the difference in audience during the morning and afternoon,
-the best thing would be to post twice a day. Tweets can be tailored this
-way to match the receiving audience, with afternoon tweets being
-targeted towards American users, and morning tweets being targeted
-towards users in Asia and Africa.
+There are indeed optimum times of the day to post on twitter. However, because of the difference in audience during the morning and afternoon, the best thing would be to post twice a day. Tweets can be tailored this way to match the receiving audience, with afternoon tweets being targeted towards American users, and morning tweets being targeted towards users in Asia and Africa.
 
-It was already apparent that images were increasing the numbers of likes
-and retweets on @jumping_uk posts, and this analysis has helped confirm
-that. It is always appropriate to include images in tweets, and when a
-URL is included within the body of a tweet, it is important to ensure
-that a summary card appears when the tweet is posted.
+It was already apparent that images were increasing the numbers of likes and retweets on @jumping_uk posts, and this analysis has helped confirm that. It is always appropriate to include images in tweets, and when a URL is included within the body of a tweet, it is important to ensure that a summary card appears when the tweet is posted.
 
-@jumping_uk are already using some of the main hashtags used alongside #rstats in popular tweets. There are some hashtags which could be used
-more, such as #bigdata, #machinelearning, #programming, and #datascientist. 
-It would also be worth following some of the #rstats
-bots, as they don't always retweet #rstats tweets.
+@jumping_uk are already using some of the main hashtags used alongside #rstats in popular tweets. There are some hashtags which could be used more, such as #bigdata, #machinelearning, #programming, and #datascientist. It would also be worth following some of the #rstats bots, as they don’t always retweet #rstats tweets.
 
 ------------------------------------------------------------------------
