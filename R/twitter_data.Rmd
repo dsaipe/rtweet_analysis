@@ -41,7 +41,7 @@ The @jumping_uk account has been active since March 2016 and has almost
 weekdays). This year, the account is currently on track to posting its
 most tweets in one year. 
 
-```{r jr timeline, echo = FALSE, }
+```{r jr timeline, echo = FALSE}
 jr_timeline = read.csv("Data/jr_timeline.csv")
 
 jr_timeline %<>%
@@ -149,12 +149,14 @@ proportion of retweeters from the UK is similar during both peaks.
 
 ```{r retweeter locations, echo = FALSE}
 morning_retweeters = read.csv("Data/morning_retweeters.csv")
-morning_retweeters = morning_retweeters[-c(61:93),] %>%
+morning_retweeters %<>%
+  filter(!(location == "")) %>%
   group_by(location) %>%
   mutate(count = n())
 
 afternoon_retweeters = read.csv("Data/afternoon_retweeters.csv")
-afternoon_retweeters = afternoon_retweeters[-c(104:147),] %>%
+afternoon_retweeters %<>%
+  filter(!(location == "")) %>%
   group_by(location) %>%
   mutate(count = n())
 
