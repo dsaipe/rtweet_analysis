@@ -3,7 +3,7 @@ title: '@jumping_uk Twitter Analysis'
 author: "David Saipe"
 date: 'July 26, 2022'
 output: 
-  pdf_document:
+  word_document:
     toc: TRUE
     toc_depth: 2
     fig_width: 6.5
@@ -11,10 +11,14 @@ output:
 editor_options: 
   markdown: 
     wrap: 72
+date: '2022-07-06'
+output: html_document
+fig_width: 6
+fig_height: 4
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 library(rtweet)
 library(dplyr)
 library(ggplot2)
@@ -35,10 +39,9 @@ library(plotrix)
 The @jumping_uk account has been active since March 2016 and has almost
 8000 followers. The account is currently posting very regularly (most
 weekdays). This year, the account is currently on track to posting its
-most tweets in one year. The graph below shows how many tweets
-@jumping_uk have posted each year since joining twitter.
+most tweets in one year. 
 
-```{r jr timeline, echo = FALSE}
+```{r jr timeline, echo = FALSE, }
 jr_timeline = read.csv("Data/jr_timeline.csv")
 
 jr_timeline %<>%
@@ -54,6 +57,7 @@ ggplot(jr_timeline, aes(year)) +
   geom_point(stat = "count") +
   geom_line(stat = "count") +
   xlim(2016,2021) +
+  xlim(2017,2021) +
   theme_classic() +
   xlab("Year") +
   ylab("Number of Tweets")
@@ -64,7 +68,7 @@ engagement on Twitter - including what day and time a tweet is posted,
 the use of hashtags and the use of media. I have used the RTweet package
 to get the data for this analysis, and have primarily been looking at
 data from the @jumping_uk timeline, as well as general tweets that use
-'#rstats'.
+'#rstats'. 
 
 ```{r #rstats, include = FALSE}
 rstats = read.csv("Data/rstats_hashtag.csv")
@@ -83,54 +87,44 @@ rstats %<>%
 
 ## Day of the Week
 
-There is mixed opinion about whether tweets posted on the weekend will
+There is mixed opinion about whether tweets posted on the weekend
 receive as much interaction as those posted during in the week. The best
 day to post a tweet usually depends on the type of content that is being
-posted, and account it is being posted from. For example, one article
-suggests that the best time to post about consumer goods is on the
-weekend, whereas the best time to post for technical business is during
-the week. @jumping_uk's timeline corroborates with this idea as tweets
-that have been posted on Saturdays and Sundays usually receive less
+posted, and the account it is being posted from. For example, one
+article suggests that the best time to post about consumer goods is on
+the weekend, whereas the best time to post for technical business is
+during the week. @jumping_uk's timeline corroborates with this idea as
+tweets that are posted on Saturdays and Sundays usually receive less
 retweets and likes, compared to tweets posted during the week.
+
+## Best day of the week to post
+
+It is widely agreed upon that tweets posted on the weekend will receive less engagement from the users audience. @jumping_uk's timeline corroborates with this. Tweets posted on Saturdays and Sundays have generally received significantly less retweets and likes. 
 
 ```{r day of the week, echo = FALSE}
 by_weekday = jr_timeline %>%
-  mutate(day = wday(created_at))
+  mutate(day = lubridate::wday(created_at, label = TRUE, abbr = TRUE, week_start = getOption("lubridate.week.start", 1)))
 
-avg_weekday = by_weekday %>%
-  group_by(day) %>%
-  summarise(avg_rt = mean(retweet_count), 
-            avg_fav = mean(favorite_count))
-avg_weekday$day = c("Sun", "Mon", "Tue", "Wed", 
-                    "Thu", "Fri", "Sat")
-avg_weekday$day = factor(avg_weekday$day,
-                         c("Mon", "Tue", "Wed", 
-                           "Thu", "Fri", "Sat", "Sun"))
-
-avg_weekday %>%
-  pivot_longer(cols = c("avg_rt", "avg_fav"),
-               names_to = c("avg_interactions"),
-               values_to = c("count")) %>%
-                 ggplot(aes(day, count, fill = avg_interactions)) + 
-  geom_col(position = "dodge") +
+ggplot(by_weekday, aes(day, interactions)) + 
+  geom_boxplot(fill = "#d95f02") +
   labs(caption = "Taken from @jumping_uk timeline from 2016 to 2022") +
   xlab("Day") +
-  ylab("Average Interactions") +
-  scale_fill_brewer(palette = "Dark2",
-                    name = "",
-                    labels = c("Likes", "Retweets")) +
+  ylab("Interactions") +
+  scale_y_log10() +
   theme_classic()
 ```
+
+In recent months the account has only been posting on weekdays, and this seems to be the right thing to be doing. More important tweets could start being posted on Mondays and Tuesdays, although there is little evidence to suggest that this would be beneficial.  
 
 \newpage
 
 ## Hour of the Day
 
-From looking at the @jumping_uk timeline, there are two average peaks in
-engagement: one from 8-11am, and another from 3-6pm, as shown below.
+From looking at the @jumping_uk timeline, tweets posted between 8-11am have generally received the highest number of interactions. There are however spikes in engagement from 2pm onwards. 
 
 ```{r time posted, echo = FALSE}
 avg_interactions = jr_timeline %>%
+  filter(interactions < 100) %>%
   group_by(hour_posted) %>%
   summarise(mean = mean(interactions),
             se = std.error(interactions))
@@ -138,31 +132,29 @@ avg_interactions = jr_timeline %>%
 avg_interactions = avg_interactions[-c(1,2),]
 
 ggplot(avg_interactions, aes(hour_posted, mean)) +
-  geom_bar(fill = "#d95f02",  color = "black", stat = "identity") +
-  geom_errorbar(aes(ymin = mean - se, ymax = mean + se), 
-                width = 0.2, 
-                position = position_dodge(0.9)) +
+  geom_bar(fill = "#1b9e77", color = "black", stat = "identity") +
+  geom_errorbar(aes(ymin = mean - se, ymax = mean + se),
+                width = .2, position = position_dodge(.9)) +
   labs(caption = "Taken from @jumping_uk timeline from 2016 to 2022") +
   xlim(6,24) +
   xlab("Hour Posted") + 
-  ylab("Average Number of Interactions") +
+  ylab("Interactions") +
   theme_classic()
 ```
 
 Examining the locations of people retweeting @jumping_uk tweets, there
 is a higher proportion of retweeters in the afternoon peak that are from
 America, with a lower proportion being from Asia and Africa. The
-proportion of retweeters from the UK remains similar during both peaks
-(just under 50%).
+proportion of retweeters from the UK is similar during both peaks.
 
 ```{r retweeter locations, echo = FALSE}
 morning_retweeters = read.csv("Data/morning_retweeters.csv")
-morning_retweeters %<>%
+morning_retweeters = morning_retweeters[-c(61:93),] %>%
   group_by(location) %>%
   mutate(count = n())
 
 afternoon_retweeters = read.csv("Data/afternoon_retweeters.csv")
-afternoon_retweeters %<>%
+afternoon_retweeters = afternoon_retweeters[-c(104:147),] %>%
   group_by(location) %>%
   mutate(count = n())
 
@@ -171,7 +163,7 @@ am = ggplot(morning_retweeters,
   geom_bar(width = 1, stat = "identity") + 
   coord_polar("y", start = 0) +
   scale_fill_brewer(palette = "Dark2", name = "Continent") +
-  labs(subtitle = "Morning peak: 8am - 11am") +
+  labs(subtitle = "Morning peak") +
   theme_void() +
   theme(plot.subtitle = element_text(hjust = 0.5),
         legend.position = "none")
@@ -181,24 +173,24 @@ pm = ggplot(afternoon_retweeters,
   geom_bar(width = 1, stat = "identity") + 
   coord_polar("y", start = 0) +
   scale_fill_brewer(palette = "Dark2", name = "Continent") +
-  labs(subtitle = "Afternoon peak: 3pm - 6pm") +
+  labs(subtitle = "Afternoon peak") +
   theme_void() +
   theme(plot.subtitle = element_text(hjust = 0.5)) 
 
 am +
-  labs(title = "Location of @jumping_uk retweeters") + 
+  labs(title = "Locations of @jumping_uk retweeters") + 
   pm
 ```
 
 The difference in the locations of morning retweeters and afternoon
 retweeters means that tweets can be targeted to specific audiences
-simply by what time they are posted. For example, tweets about the
+through the time that they are posted. For example, tweets about the
 ongoing RStudio Conference may receive more interaction when tweeted
 between 2pm-4pm, as the conference is being held in Washington.
 
-It should also be taken into account that a large proportion of
-@rstatstweet followers are from America, so the impact of using #rstats
-will be more significant in the afternoon.
+It should also 
+be taken into account that around 75% of @rstatstweet followers are from America, 
+so tweets containing #rstats may receive more engagement in the afternoon.
 
 ```{r rstats follower locations, echo = FALSE}
 rstats_followers = read.csv("Data/rstats_followers2.csv")
@@ -218,16 +210,19 @@ ggplot(rstats_followers,
   theme_void()
 ```
 
-Despite this, it is important to tweet during both peaks of the day. Tweets come and go off the timeline very quickly so it's important to post and multiple times of the day to ensure it reaches as many followers as possible. 
+Despite this, it is important to tweet during both peaks of the day.
+Tweets come and go off the timeline very quickly so it's important to
+post and multiple times of the day to ensure it reaches as many
+followers as possible.
 
 \newpage
 
 # Images
 
-Images do affect levels of engagement positively. The
-figure below shows the average levels of interaction for tweets with no
-media and tweets that include a photo, taken from both the #rstats
-timeline and the @jumping_uk timeline.
+Images do affect levels of engagement positively. The figure below shows
+the average levels of interaction for tweets with no media and tweets
+that include a photo, taken from both the #rstats timeline and the
+@jumping_uk timeline.
 
 ```{r images, echo = FALSE}
 rstats = rstats[-c(29, 3913),]
@@ -259,14 +254,16 @@ avg_interactions %>%
   theme_classic()
 ```
 
-Including images is a good start to increasing engagement. Having consistent branding is also important for keeping the page professional looking. Images can also be used to include information can can't be compressed into 280 characters.
+Including images is a good start to increasing engagement. Having
+consistent branding is also important for keeping the page professional
+looking. Images can also be used to include information can can't be
+compressed into 280 characters.
 
 \newpage
 
 # Hashtags
 
-There are multiple bots on twitter that retweet tweets containing #rstats 
-(@rstatstweet and @rstats4ds are the two main ones). This
+There are multiple bots on twitter that retweet tweets containing #rstats (@rstatstweet and @rstats4ds are the two main ones). This
 hashtag should always be included in @jumping_uk tweets. Below are the
 top 30 most commonly used hashtags alongside #rstats, taken from the 100
 most popular tweets containing #rstats (07/07 - 14/07).
@@ -324,8 +321,7 @@ jr_hashtags %>%
 ```
 
 @jumping_uk doesn't use #machinelearning and #bigdata as often; these
-are two hashtags that are often found in the most popular tweets on the
-#rstats timeline. The figure below shows that these have a significant
+are two hashtags that are often found in the most popular tweets on the #rstats timeline. The figure below shows that these have a significant
 impact on engagement on #rstats tweets, and so they could be used more
 often in the future.
 
@@ -369,12 +365,25 @@ would be appearing anyway.
 
 # Conclusion
 
-The factors analysed in this report have an effect on the levels of engagement with @jumping_uk tweets to varying extents. 
+The factors analysed in this report have an effect on the levels of
+engagement with @jumping_uk tweets to varying extents.
 
-There are indeed optimum times of the day to post on twitter. However, because of the difference in audience during the morning and afternoon, the best thing would be to post twice a day. Tweets can be tailored this way to match the receiving audience, with afternoon tweets being targeted towards American users, and morning tweets being targeted towards users in Asia and Africa. 
+There are indeed optimum times of the day to post on twitter. However,
+because of the difference in audience during the morning and afternoon,
+the best thing would be to post twice a day. Tweets can be tailored this
+way to match the receiving audience, with afternoon tweets being
+targeted towards American users, and morning tweets being targeted
+towards users in Asia and Africa.
 
-It was already apparent that images were increasing the numbers of likes and retweets on @jumping_uk posts, and this analysis has helped confirm that. It is always appropriate to include images in tweets, and when a URL is included within the body of a tweet, it is important to ensure that a summary card appears when the tweet is posted. 
+It was already apparent that images were increasing the numbers of likes
+and retweets on @jumping_uk posts, and this analysis has helped confirm
+that. It is always appropriate to include images in tweets, and when a
+URL is included within the body of a tweet, it is important to ensure
+that a summary card appears when the tweet is posted.
 
-@jumping_uk are already using some of the main hashtags used alongside #rstats in popular tweets. The word cloud shows which hashtags have been used by @jumping_uk more than others.
+@jumping_uk are already using some of the main hashtags used alongside #rstats in popular tweets. There are some hashtags which could be used
+more, such as #bigdata, #machinelearning, #programming, and #datascientist. 
+It would also be worth following some of the #rstats
+bots, as they don't always retweet #rstats tweets.
 
 ------------------------------------------------------------------------
