@@ -194,7 +194,7 @@ so tweets containing #rstats may receive more engagement in the afternoon.
 rstats_followers = read.csv("Data/rstats_followers2.csv")
 rstats_followers %<>%
   select(location) %>%
-  filter(!(locations == "")) %>%
+  filter(!(location == "")) %>%
   group_by(location) %>%
   summarise(count = n())
 
