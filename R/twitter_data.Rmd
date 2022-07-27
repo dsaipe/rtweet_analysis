@@ -147,14 +147,14 @@ morning_retweeters %<>%
   select(location) %>%
   filter(!(location == "")) %>%
   group_by(location) %>%
-  mutate(count = n())
+  summarise(count = n())
 
 afternoon_retweeters = read.csv("Data/afternoon_retweeters.csv")
 afternoon_retweeters %<>%
   select(location) %>%
   filter(!(location == "")) %>%
   group_by(location) %>%
-  mutate(count = n())
+  summarise(count = n())
 
 am = ggplot(morning_retweeters, 
        aes(x = "", y = count, fill = location)) +
@@ -192,12 +192,12 @@ so tweets containing #rstats may receive more engagement in the afternoon.
 
 ```{r rstats follower locations, echo = FALSE, fig.width = 4.333, fig.height = 3, fig.align = 'center'}
 rstats_followers = read.csv("Data/rstats_followers2.csv")
-rstats_followers = rstats_followers[1:216,]
 rstats_followers %<>%
-  select(location)
-rstats_followers %<>%
+  select(location) %>%
+  filter(!(locations == "")) %>%
   group_by(location) %>%
-  mutate(count = n())
+  summarise(count = n())
+
 ggplot(rstats_followers, 
        aes(x = "", y = count, fill = location)) +
   geom_bar(width = 1, stat = "identity") + 
