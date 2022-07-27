@@ -249,7 +249,7 @@ avg_interactions %>%
 
 Including images is a good start to increasing engagement. Having
 consistent branding is also important for keeping the page professional
-looking. Images can also be used to include information can can't be
+looking. Images can also be used to include information that can't be
 compressed into 280 characters.
 
 \newpage
