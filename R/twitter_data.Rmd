@@ -213,7 +213,7 @@ Tweets come and go off the timeline very quickly so it's important to
 post and multiple times of the day to ensure it reaches as many
 followers as possible.
 
-## Images
+# Images
 
 Images do affect levels of engagement positively. The figure below shows the average levels of interaction for tweets with no media and tweets that include a photo, taken from both the #rstats timeline and the @jumping_uk timeline.
 
@@ -254,7 +254,7 @@ compressed into 280 characters.
 
 \newpage
 
-## Hashtags
+# Hashtags
 
 There are multiple bots on twitter that retweet tweets containing #rstats (@rstatstweet and @rstats4ds are the two main ones). This hashtag should always be included in @jumping_uk tweets. Below are the top 30 most commonly used hashtags alongside #rstats, taken from the 100 most popular tweets containing #rstats (07/07 - 14/07). 
 
