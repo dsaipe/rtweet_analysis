@@ -91,7 +91,7 @@ ggplot(by_weekday, aes(day, interactions)) +
   geom_boxplot(fill = "#d95f02") +
   labs(caption = "Taken from [@jumping_uk](https://twitter.com/jumping_uk) timeline from 2016 to 2022") +
   xlab("Day") +
-  ylab("Average Interactions") +
+  ylab("Interactions") +
   scale_y_log10() +
   theme_classic()
 ```
@@ -131,7 +131,7 @@ hour_interactions = ggplot(avg_interactions, aes(hour_posted, mean)) +
   labs(caption = "Taken from [@jumping_uk](https://twitter.com/jumping_uk) timeline from 2016 to 2022") +
   xlim(6,24) +
   xlab("Hour Posted") + 
-  ylab("Interactions") +
+  ylab("Average Interactions") +
   theme_classic()
 
 hour_count + hour_interactions
