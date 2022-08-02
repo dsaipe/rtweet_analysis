@@ -1,3 +1,12 @@
+library(rtweet)
+
+# @jumping_uk timeline
+get_timeline('jumping_uk', n = 2000)
+
+# #rstats timeline
+search_tweets('#rstats', n = 5000)
+
+# @jumping_uk retweeters
 morning = jr_timeline %>%
   filter(hour_posted <= 13)
 afternoon = jr_timeline %>%
