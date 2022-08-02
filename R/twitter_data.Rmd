@@ -89,7 +89,7 @@ by_weekday = jr_timeline %>%
 
 ggplot(by_weekday, aes(day, interactions)) +
   geom_boxplot(fill = "#d95f02") +
-  labs(caption = "Taken from [@jumping_uk](https://twitter.com/jumping_uk) timeline from 2016 to 2022") +
+  labs(caption = "Taken from @jumping_uk timeline from 2016 to 2022") +
   xlab("Day") +
   ylab("Interactions") +
   scale_y_log10() +
@@ -128,7 +128,7 @@ hour_interactions = ggplot(avg_interactions, aes(hour_posted, mean)) +
   geom_bar(fill = "#1b9e77", color = "black", stat = "identity") +
   geom_errorbar(aes(ymin = mean - se, ymax = mean + se),
                     width = 0.2, position = position_dodge(0.9)) +
-  labs(caption = "Taken from [@jumping_uk](https://twitter.com/jumping_uk) timeline from 2016 to 2022") +
+  labs(caption = "Taken from @jumping_uk timeline from 2016 to 2022") +
   xlim(6,24) +
   xlab("Hour Posted") + 
   ylab("Average Interactions") +
@@ -176,7 +176,7 @@ pm = ggplot(afternoon_retweeters,
   theme(plot.subtitle = element_text(hjust = 0.5)) 
 
 am +
-  labs(title = "Locations of [@jumping_uk](https://twitter.com/jumping_uk) retweeters") + 
+  labs(title = "Locations of @jumping_uk retweeters") + 
   pm
 ```
 
@@ -203,7 +203,7 @@ ggplot(rstats_followers,
   geom_bar(width = 1, stat = "identity") + 
   coord_polar("y", start = 0) +
   scale_fill_brewer(palette = "Dark2", name = "Continent") +
-  labs(title = "Locations of [@rstatstweet](https://twitter.com/rstatstweet) followers",
+  labs(title = "Locations of @rstatstweet followers",
        caption = "Based off a sample of 500 followers") +
   theme_void()
 ```
@@ -243,7 +243,7 @@ avg_interactions %>%
   ylab("Average Interactions") + 
   scale_fill_brewer(palette = "Dark2", 
                     name = "Source",
-                    labels = c("[@jumping_uk](https://twitter.com/jumping_uk)", "#rstats")) +
+                    labels = c("@jumping_uk", "#rstats")) +
   theme_classic()
 ```
 
@@ -300,7 +300,7 @@ jr_hashtags %>%
                     name = "Hashtag Used",
                     labels = c("No", "Yes")) +
   labs(title = "Impact of hashtags used alongside #rstats",
-       caption = "Taken from [@jumping_uk](https://twitter.com/jumping_uk) timeline from 2016 to 2022") +
+       caption = "Taken from @jumping_uk timeline from 2016 to 2022") +
   xlab("Hashtag") +
   ylab("Average Interactions") +
   theme_classic() +
